@@ -1,0 +1,12 @@
+[
+    {
+        "roomId" : 123456,
+        "gameEndStatus" : true,
+        "waitingStatus" : true,
+        "gameMaster" : "",
+        "user": [ ],
+        "start" : "",
+        "goal" : "",
+        "timeLimit" : 1234
+    }
+]
