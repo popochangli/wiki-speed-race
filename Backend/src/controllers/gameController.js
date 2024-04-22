@@ -19,7 +19,6 @@ export const createUser = async (req, res) => {
       goal: '',
     });
     await newUser.save();
-    res.status(200).json(newUser);
     return newUser;
   } catch (error) {
     res.status(409).json({ message: error.message });
@@ -52,3 +51,37 @@ export const createRoom = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 }
+
+export const joinRoom = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const room = await roomQuery(id);
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    const newUser = await createUser(req);
+    if (!newUser) {
+      return res.status(400).json({ message: "Failed to create user" });
+    }
+
+    room.users.push(newUser._id);
+    await room.save();
+
+    res.status(200).json(room);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+async function roomQuery(id){
+  const room = await Room.findById(id);
+  
+  if(!room){
+    throw new Error("Room not found");
+  }
+
+  return room;
+}
+
