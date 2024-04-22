@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     goal: {
         type: String,
         required: false
+    },
+    finishTime: {
+      type: Number,
+      require: false
     }
   });
 

@@ -40,7 +40,10 @@ export const createRoom = async (req, res) => {
       gameEndStatus: false,
       waitingStatus: true,
       gameMasterId: newUser.userId,
-      users: [newUser._id],
+      users: [{ user: newUser._id, status: false }],
+      usersStatus: {
+        [newUser._id]: false
+      },
       start: '',
       goal: '',
       timeLimit: 300
@@ -52,36 +55,52 @@ export const createRoom = async (req, res) => {
   }
 }
 
+export const getRoom = async (req, res) => {
+  const  roomId  = req.params.id;
+  if (!roomId || roomId.length === 0) {
+      return res.status(400).json({ message: "No roomId provided" });
+  }
+  
+  try {
+      const room = await Room.findOne({ roomId: roomId });
+      if (!room) {
+          return res.status(404).json({ message: "Room not found" });
+      }
+      res.json(room);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+export const findRoom = async (roomId) => {
+  try {
+    return await Room.findOne({ roomId: roomId });
+  } catch (error) {
+    throw new Error('Database error when fetching room');
+  }
+};
+
 export const joinRoom = async (req, res) => {
-  const { id } = req.params;
+  const roomId = req.params.id;
 
   try {
-    const room = await roomQuery(id);
+    const room = await findRoom(roomId);
     if (!room) {
       return res.status(404).json({ message: "Room not found" });
     }
 
-    const newUser = await createUser(req);
+    const newUser = await createUser(req, res);
     if (!newUser) {
-      return res.status(400).json({ message: "Failed to create user" });
+      return res.status(400).json({ message: "User creation failed" });
     }
 
-    room.users.push(newUser._id);
+    room.users.push({ user: newUser._id, status: false });
     await room.save();
 
-    res.status(200).json(room);
+    res.json(room);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-async function roomQuery(id){
-  const room = await Room.findById(id);
-  
-  if(!room){
-    throw new Error("Room not found");
-  }
-
-  return room;
-}
 

@@ -21,11 +21,16 @@ const roomSchema = new mongoose.Schema({
     type: String,
     require: false
   },
-  users: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
-    required: false
-  }, 
+  users: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    status: {
+      type: Boolean,
+      required: false
+    }
+  }], 
   start: {
     type: String,
     require: true
