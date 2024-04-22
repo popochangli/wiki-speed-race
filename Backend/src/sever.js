@@ -3,7 +3,6 @@ import "./config/db.js";
 
 import app from "./app.js";
 
-// This is for maintaining the server.
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
   console.log(err.stack);

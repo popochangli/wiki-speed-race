@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
     name: {
       type: String,
-      unique: true,
       required: false
     },
     userId: {
@@ -21,15 +20,15 @@ const userSchema = new mongoose.Schema({
     },
     totalArticle: {
         type: [String],
-        require: false
+        required: false
     },
     start: {
         type: String,
-        require: true
+        required: false
     },
     goal: {
         type: String,
-        require: true
+        required: false
     }
   });
 
