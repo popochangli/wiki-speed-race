@@ -1,0 +1,73 @@
+.text-nowrap {
+    white-space: nowrap !important;
+}
+
+.pt-2 {
+    padding-top: .5rem !important;
+}
+
+.px-4 {
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
+}
+
+.col-sm-auto,
+.col-lg-auto {
+    flex: 0 0 auto;
+    width: auto;
+}
+
+.row > * {
+    flex-shrink: 0;
+    width: 50%;
+    max-width: 50%;
+    padding-right: calc(var(--bs-gutter-x)* .5);
+    padding-left: calc(var(--bs-gutter-x)* .5);
+    margin-top: var(--bs-gutter-y);
+    line-height: 1.5; /* Increase line height */
+}
+
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+user agent stylesheet div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(-1* var(--bs-gutter-y));
+    margin-right: calc(-.5* var(--bs-gutter-x));
+    margin-left: calc(-.5* var(--bs-gutter-x));
+}
+
+.HUD {
+    display: inline-block;
+    min-width: 40%;
+    width: auto;
+    background-color: var(--bs-body-bg);
+    border: 2px solid #000000 !important;
+    height: auto;
+    top: 0rem;
+    overflow-y: hidden;
+    pointer-events: auto;
+}
+
+.HUDwrapper {
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    margin: 0 auto;
+    padding-bottom: 1rem;
+    pointer-events: none;
+}

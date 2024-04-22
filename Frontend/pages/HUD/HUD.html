@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+
+    <!-- Linking external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Linking external JavaScript file -->
+    <script src="script.js" defer></script> <!-- 'defer' attribute ensures the script is executed after the HTML is parsed -->
+</head>
+<body>
+    <!-- Body content -->
+
+    <div class="content">
+        <!-- Your content goes here -->
+    </div>
+
+    <div class="HUDwrapper HUDwrapper-fade container-xxl">
+        <div id="time-box" class="HUD play-HUD">
+            <div class="row flex-row">
+                <div class="col-sm-auto text-nowrap px-4 pt-2">
+                    Goal Article<br><strong id="goal-article">Gold</strong>
+                </div>
+                <div class="col-lg-auto text-nowrap px-4 pt-2">
+                    Current Article<br><strong id="current-article">Earth</strong>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-sm-auto text-nowrap px-4 pt-2">
+                    Links clicked<br><strong id="links-clicked">0</strong>
+                </div>
+                <div class="col text-nowrap px-4 pt-2">
+                    Time Elapsed<br><strong id="time-elapsed">0:00 s</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
