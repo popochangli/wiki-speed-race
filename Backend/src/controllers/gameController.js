@@ -103,4 +103,87 @@ export const joinRoom = async (req, res) => {
   }
 };
 
+export const setStart = async (req, res) => {
+  const { roomId } = req.params;
+  const { start } = req.body;
+  console.log(start)
+  try {
+      const room = await Room.findOneAndUpdate({ roomId: roomId }, { start: start }, { new: true });
+      if (!room) {
+          return res.status(404).json({ message: "Room not found" });
+      }
+
+      const userIds = room.users.map(user => user.user);
+      await User.updateMany({ _id: { $in: userIds } }, { start: start });
+
+      res.json({ room: room, message: "Start time updated for room and all associated users." });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+export const setGoal = async (req, res) => {
+  const { roomId } = req.params;
+  const { goal } = req.body;
+  
+  try {
+      const room = await Room.findOneAndUpdate({ roomId: roomId }, { goal: goal }, { new: true });
+      if (!room) {
+          return res.status(404).json({ message: "Room not found" });
+      }
+
+      const userIds = room.users.map(user => user.user);
+      await User.updateMany({ _id: { $in: userIds } }, { goal: goal });
+
+      res.json({ room: room, message: "Start time updated for room and all associated users." });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+export const setTimeLimit = async (req, res) => {
+  const { roomId } = req.params;  
+  const { timeLimit } = req.body; 
+
+  if (!timeLimit || typeof timeLimit !== 'number') {
+      return res.status(400).json({ message: "Invalid timeLimit provided. Please provide a valid number." });
+  }
+
+  try {
+      const room = await Room.findOneAndUpdate(
+          { roomId: roomId },
+          { timeLimit: timeLimit },
+          { new: true, runValidators: true } 
+      );
+
+      if (!room) {
+          return res.status(404).json({ message: "Room not found with provided ID" });
+      }
+
+      res.json({ room: room, message: "Time limit updated successfully." });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+export const kickUser = async (req, res) => {
+  const { roomId } = req.params; 
+  const { userId } = req.body;
+
+  try {
+      const room = await Room.findOneAndUpdate(
+          { roomId: roomId },
+          { $pull: { users: { user: _id } } },
+          { new: true }
+      );
+
+      if (!room) {
+          return res.status(404).json({ message: "Room not found" });
+      }
+
+      res.json({ room: room, message: "User kicked successfully." });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
 
