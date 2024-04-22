@@ -6,7 +6,6 @@ const roomSchema = new mongoose.Schema({
   roomId: {
     type: String,
       required: true,
-      unique: true,
       minlength: 6,
       maxlength: 6,
   },
