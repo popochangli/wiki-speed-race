@@ -22,8 +22,10 @@ app.get("/joinRoom", (req, res) => {
   );
 });
 
-app.get("/contact", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "contact.html"));
+app.get("/CreateNewGame", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "./pages/CreateNewGame/CreateNewGame.html")
+  );
 });
 
 const PORT = 3221;
