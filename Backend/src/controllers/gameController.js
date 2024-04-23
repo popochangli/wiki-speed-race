@@ -41,7 +41,7 @@ export const createRoom = async (req, res) => {
       gameEndStatus: false,
       waitingStatus: true,
       gameMasterId: newUser._id,
-      users: [{ user: newUser._id, status: false }],
+      users: [{ user: newUser._id, status: false, name: newUser.name }],
       usersStatus: {
         [newUser._id]: false
       },
@@ -95,7 +95,7 @@ export const joinRoom = async (req, res) => {
       return res.status(400).json({ message: "User creation failed" });
     }
   
-    room.users.push({ user: newUser._id, status: false });
+    room.users.push({ user: newUser._id, status: false, name: newUser.name });
     await room.save();
     
     res.json(room);
