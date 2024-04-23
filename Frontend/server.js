@@ -21,10 +21,15 @@ app.get("/joinRoom", (req, res) => {
     path.join(__dirname, "public", "./pages/JoinRoom/JoinRoom.html")
   );
 });
-
 app.get("/CreateNewGame", (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "./pages/CreateNewGame/CreateNewGame.html")
+  );
+});
+
+app.get("/WaitingRoom", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "./pages/WaitingRoom/WaitingRoom.html")
   );
 });
 

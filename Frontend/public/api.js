@@ -15,10 +15,13 @@ export async function createRoom(name) {
     redirect: "follow",
   };
 
-  await fetch(`${BACKEND_URL}/game/rooms/createRoom`, requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
+  const temp = await fetch(
+    `${BACKEND_URL}/game/rooms/createRoom`,
+    requestOptions
+  )
+    .then((response) => response.json())
     .catch((error) => console.error(error));
+  return temp;
 }
 
 // export async function createItem(item) {
