@@ -1,4 +1,4 @@
-import { getRoom, kick } from "../../api.js";
+import { getRoom, kick, startGame } from "../../api.js";
 
 const gamePin = document.getElementById("game-pin");
 const roomId = localStorage.getItem("roomId");
@@ -22,6 +22,11 @@ function submitForm() {
   // Close the modal
   toggleModal();
 }
+
+const startButton = document.getElementById("startButton");
+startButton.addEventListener("click", async function () {
+  await startGame(roomId);
+});
 
 // Set time limit
 const buttons = document.getElementById("timeLimit");

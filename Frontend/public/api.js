@@ -1,5 +1,26 @@
 import { BACKEND_URL } from "./config.js";
 
+export async function startGame(roomId) {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    "roomId": roomId,
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch(`${BACKEND_URL}/game/rooms/${roomId}/setStart`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+}
+
 export async function kick(roomId, userId) {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
