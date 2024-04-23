@@ -32,6 +32,15 @@ app.get("/WaitingRoom", (req, res) => {
     path.join(__dirname, "public", "./pages/WaitingRoom/WaitingRoom.html")
   );
 });
+app.get("/WaitingRoomUser", (req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname,
+      "public",
+      "./pages/WaitingRoomUser/WaitingRoomUser.html"
+    )
+  );
+});
 
 app.get("/GamePlay", (req, res) => {
   res.sendFile(
