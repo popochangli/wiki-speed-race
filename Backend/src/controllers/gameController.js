@@ -108,7 +108,11 @@ export const setStart = async (req, res) => {
   const { start } = req.body;
   console.log(start)
   try {
-      const room = await Room.findOneAndUpdate({ roomId: roomId }, { start: start }, { new: true });
+      const room = await Room.findOneAndUpdate(
+        { roomId: roomId },
+        { start: start },
+        { new: true }
+      );
       if (!room) {
           return res.status(404).json({ message: "Room not found" });
       }
@@ -127,7 +131,11 @@ export const setGoal = async (req, res) => {
   const { goal } = req.body;
   
   try {
-      const room = await Room.findOneAndUpdate({ roomId: roomId }, { goal: goal }, { new: true });
+      const room = await Room.findOneAndUpdate(
+        { roomId: roomId }, 
+        { goal: goal }, 
+        { new: true }
+      );
       if (!room) {
           return res.status(404).json({ message: "Room not found" });
       }
@@ -173,9 +181,10 @@ export const kickUser = async (req, res) => {
   try {
       const room = await Room.findOneAndUpdate(
           { roomId: roomId },
-          { $pull: { users: { user: _id } } },
+          { $pull: { users: { user: userId } } },
           { new: true }
       );
+
 
       if (!room) {
           return res.status(404).json({ message: "Room not found" });
@@ -187,3 +196,70 @@ export const kickUser = async (req, res) => {
   }
 };
 
+async function checkRoomGoal(roomId, x) {
+  try {
+    // Find the room by roomId
+    const room = await Room.findOne({ roomId: roomId });
+
+    // If room exists, compare its goal with x
+    if (room) {
+      if (room.goal === x) {
+        console.log(`Goal in the room ${roomId} equals ${x}`);
+        return true;
+      } else {
+        console.log(`Goal in the room ${roomId} does not equal ${x}`);
+        return false;
+      }
+    } else {
+      console.log("Room not found");
+    }
+  } catch (error) {
+    // If an error occurs, throw it or handle it as needed
+    console.error(error);
+    throw error;
+  }
+}
+
+export const nextPage = async (req, res) => {
+  const {roomId} = req.params;
+  const {userId ,newPage} = req.body; // userId = _Id
+
+  if (!newPage) {
+    return res.status(400).json({ message : "No page provided!"});
+  }
+  try {
+      const currentRoom = await Room.findOne({ roomId : roomId });
+      const checkUser = await User.findOne({ _id : userId });
+      if (!currentRoom) {
+        return res.status(401).json({ message : "Room doesn't exist!"});
+      }
+      if (!checkUser) {
+        return res.status(401).json({ message : "User doesn't exist!"});
+      }
+      
+      const currentUser = await User.findOneAndUpdate(
+        {_id : userId},
+        { $push : { totalArticle : newPage}},
+        { new : true}
+      );
+      
+    
+    const room = await Room.findOne({ roomId: roomId });
+
+    if (room.goal === newPage) {
+      // Update the user's status in the room
+      const result = await Room.updateOne(
+        { roomId: roomId, "users.user": userId }, // Filter to find the room by roomId and user by userId
+        { $set: { "users.$.status": true } } // Update operation to set the user's status to true
+      );
+      res.json(`${userId} reach Goal!!!`);
+    }
+    else {
+      console.log(`goal does not equal ${newPage}`);
+      res.json({ message : `Add ${newPage} acticle to ${userId}`});
+    }
+
+  } catch(error) {
+      res.status(500).json({ message : error.message });
+  }
+};
