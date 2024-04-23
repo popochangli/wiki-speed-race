@@ -261,3 +261,19 @@ export const nextPage = async (req, res) => {
       res.status(500).json({ message : error.message });
   }
 };
+
+export const deleteRoom = async (req, res) => {
+    const {roomId} = req.params;
+    try {
+        const result = await Room.deleteOne({ roomId: roomId });
+    
+        if (result.deletedCount > 0) {
+          res.json({ message : `delete room : ${roomId} successfully`});
+        } else {
+          res.status(404).json({ message : `room : ${roomId} not found`});
+        }
+    }
+    catch (error) {
+      res.status(500).json({ message : error.message });
+    }
+}

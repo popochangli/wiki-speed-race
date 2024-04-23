@@ -12,6 +12,7 @@ router.post('/rooms/:roomId/setGoal', gameController.setGoal);
 router.post('/rooms/:roomId/timeLimit', gameController.setTimeLimit);
 router.post('/rooms/:roomId/kick', gameController.kickUser);
 router.post('/rooms/:roomId/nextPage', gameController.nextPage);
+router.post('/rooms/:roomId/deleteRoom', gameController.deleteRoom);
 
 
 export default router;
