@@ -1,6 +1,4 @@
 import mongoose from 'mongoose'; 
-import User from './user.js';
-import { name } from 'ejs';
 
 const roomSchema = new mongoose.Schema({
 
