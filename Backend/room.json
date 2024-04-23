@@ -3,7 +3,7 @@
         "roomId" : 123456,
         "gameEndStatus" : true,
         "waitingStatus" : true,
-        "gameMaster" : "",
+        "gameMasterId" : 1234,
         "user": [ ],
         "start" : "",
         "goal" : "",
