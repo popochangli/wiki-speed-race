@@ -106,7 +106,11 @@ export const setStart = async (req, res) => {
   const { start } = req.body;
   console.log(start)
   try {
-      const room = await Room.findOneAndUpdate({ roomId: roomId }, { start: start }, { new: true });
+      const room = await Room.findOneAndUpdate(
+        { roomId: roomId },
+        { start: start },
+        { new: true }
+      );
       if (!room) {
           return res.status(404).json({ message: "Room not found" });
       }
@@ -125,7 +129,11 @@ export const setGoal = async (req, res) => {
   const { goal } = req.body;
   
   try {
-      const room = await Room.findOneAndUpdate({ roomId: roomId }, { goal: goal }, { new: true });
+      const room = await Room.findOneAndUpdate(
+        { roomId: roomId }, 
+        { goal: goal }, 
+        { new: true }
+      );
       if (!room) {
           return res.status(404).json({ message: "Room not found" });
       }
@@ -174,6 +182,7 @@ export const kickUser = async (req, res) => {
           { new: true }
       );
 
+
       if (!room) {
           return res.status(404).json({ message: "Room not found" });
       }
@@ -183,4 +192,130 @@ export const kickUser = async (req, res) => {
       res.status(500).json({ message: error.message });
   }
 };
+
+
+
+export const nextPage = async (req, res) => {
+  const {roomId} = req.params;
+  const {userId ,newPage} = req.body; // userId = _Id
+
+  if (!newPage) {
+    return res.status(400).json({ message : "No page provided!"});
+  }
+  try {
+      const currentRoom = await Room.findOne({ roomId : roomId });
+      const checkUser = await User.findOneAndUpdate(
+          {_id : userId},
+          { $push : { totalArticle : newPage}},
+          { new : true}
+      );
+      if (!currentRoom) {
+        return res.status(401).json({ message : "Room doesn't exist!"});
+      }
+      if (!checkUser) {
+        return res.status(401).json({ message : "User doesn't exist!"});
+      }
+      
+    let room = await Room.findOne({ roomId: roomId });
+
+    if (room.goal === newPage) {
+      // Update the user's status in the room
+      const result = await Room.updateOne(
+        { roomId: roomId, "users.user": userId }, // Filter to find the room by roomId and user by userId
+        { $set: { "users.$.status": true } } // Update operation to set the user's status to true
+      );
+      console.log(`goal is equal to ${newPage}`);
+
+      const thisRoom = await Room.findOne({roomId: roomId})
+      let isGameEnd = true
+      for( const user of thisRoom.users) {
+          if (user.status === false) {
+            console.log(user.status);
+              isGameEnd = false;
+          }
+      }
+
+      if( isGameEnd) {
+          const gameEnd = await setGameEnd(roomId);
+          if (gameEnd) {
+            res.json({ message : `Room : ${roomId} End!!! everyone wins`});
+          }
+          else {
+            res.json({ message : `Add ${newPage} acticle to ${userId}`});
+          }
+      }
+      else {
+          res.json({ message : `${userId} reach Goal!!!` });
+      }
+    }
+    else {
+      console.log(`goal does not equal ${newPage}`);
+      res.json({ message : `Add ${newPage} acticle to ${userId}`});
+    }
+
+  } catch(error) {
+      res.status(500).json({ message : error.message });
+  }
+};
+
+async function setGameEnd(roomId) {
+  return Room.findOneAndUpdate(
+    { roomId : roomId},
+    { gameEndStatus : true},
+    { new : true}
+  );
+}
+export const timeLimitExceed = async (req, res) => {
+    const {roomId} = req.params;
+    try {
+        const gameEnd = await setGameEnd(roomId);
+        if (gameEnd) {
+           res.json({ message : `Room : ${roomId} end due to time limit.`});
+        }
+        else {
+          res.status(401).json({ message : `Room : ${roomId} end not successfully`});
+        }
+    }
+    catch (error) {
+        res.start(500).json({ message : error.message});
+    }
+}
+
+export const deleteRoom = async (req, res) => {
+    const {roomId} = req.params;
+    try {
+        const result = await Room.deleteOne({ roomId: roomId });
+    
+        if (result.deletedCount > 0) {
+          res.json({ message : `delete room : ${roomId} successfully`});
+        } else {
+          res.status(404).json({ message : `room : ${roomId} not found`});
+        }
+    }
+    catch (error) {
+      res.status(500).json({ message : error.message });
+    }
+}
+
+export const startGame = async (req, res) => {
+  const {roomId} = req.params;
+  try {
+      const result = await Room.findOneAndUpdate(
+          { roomId : roomId},
+          { waitingStatus : false},
+          { new : true}
+      )
+      if(result) {
+          res.json({ message : `Room : ${roomId} start!!`});
+      }
+      else {
+        res.status(404).json({ message : `Room : ${roomId} not found!`});
+      }
+  }
+  catch (error) {
+      res.status(500).json({ message : error.message});
+  }
+}
+
+
 
