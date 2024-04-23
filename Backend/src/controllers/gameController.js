@@ -277,3 +277,26 @@ export const deleteRoom = async (req, res) => {
       res.status(500).json({ message : error.message });
     }
 }
+
+export const startGame = async (req, res) => {
+  const {roomId} = req.params;
+  try {
+      const result = await Room.findOneAndUpdate(
+          { roomId : roomId},
+          { waitingStatus : false},
+          { new : true}
+      )
+      if(result) {
+          res.json({ message : `Room : ${roomId} start!!`});
+      }
+      else {
+        res.status(404).json({ message : `Room : ${roomId} not found!`});
+      }
+  }
+  catch (error) {
+      res.status(500).json({ message : error.message});
+  }
+}
+
+
+
