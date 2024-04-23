@@ -1282,3 +1282,7 @@ video {
       scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 }
+
+.min-h-screen {
+  min-height: 100vh;
+}
