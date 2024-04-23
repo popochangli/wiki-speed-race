@@ -193,29 +193,7 @@ export const kickUser = async (req, res) => {
   }
 };
 
-async function checkRoomGoal(roomId, x) {
-  try {
-    // Find the room by roomId
-    const room = await Room.findOne({ roomId: roomId });
 
-    // If room exists, compare its goal with x
-    if (room) {
-      if (room.goal === x) {
-        console.log(`Goal in the room ${roomId} equals ${x}`);
-        return true;
-      } else {
-        console.log(`Goal in the room ${roomId} does not equal ${x}`);
-        return false;
-      }
-    } else {
-      console.log("Room not found");
-    }
-  } catch (error) {
-    // If an error occurs, throw it or handle it as needed
-    console.error(error);
-    throw error;
-  }
-}
 
 export const nextPage = async (req, res) => {
   const {roomId} = req.params;
@@ -240,8 +218,7 @@ export const nextPage = async (req, res) => {
         { new : true}
       );
       
-    
-    const room = await Room.findOne({ roomId: roomId });
+    let room = await Room.findOne({ roomId: roomId });
 
     if (room.goal === newPage) {
       // Update the user's status in the room
@@ -250,7 +227,28 @@ export const nextPage = async (req, res) => {
         { $set: { "users.$.status": true } } // Update operation to set the user's status to true
       );
       console.log(`goal is equal to ${newPage}`);
-      res.json({message : `${userId} reach Goal!!!`});
+
+      const thisRoom = await Room.findOne({roomId: roomId})
+      let isGameEnd = true
+      for( const user of thisRoom.users) {
+          if (user.status === false) {
+            console.log(user.status);
+              isGameEnd = false;
+          }
+      }
+
+      if( isGameEnd) {
+          const gameEnd = await setGameEnd(roomId);
+          if (gameEnd) {
+            res.json({ message : `Room : ${roomId} End!!! everyone wins`});
+          }
+          else {
+            res.json({ message : `Add ${newPage} acticle to ${userId}`});
+          }
+      }
+      else {
+          res.json({ message : `${userId} reach Goal!!!` });
+      }
     }
     else {
       console.log(`goal does not equal ${newPage}`);
@@ -261,6 +259,29 @@ export const nextPage = async (req, res) => {
       res.status(500).json({ message : error.message });
   }
 };
+
+async function setGameEnd(roomId) {
+  return Room.findOneAndUpdate(
+    { roomId : roomId},
+    { gameEndStatus : true},
+    { new : true}
+  );
+}
+export const timeLimitExceed = async (req, res) => {
+    const {roomId} = req.params;
+    try {
+        const gameEnd = await setGameEnd(roomId);
+        if (gameEnd) {
+           res.json({ message : `Room : ${roomId} end due to time limit.`});
+        }
+        else {
+          res.status(401).json({ message : `Room : ${roomId} end not successfully`});
+        }
+    }
+    catch (error) {
+        res.start(500).json({ message : error.message});
+    }
+}
 
 export const deleteRoom = async (req, res) => {
     const {roomId} = req.params;
