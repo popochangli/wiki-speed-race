@@ -42,9 +42,6 @@ export const createRoom = async (req, res) => {
       waitingStatus: true,
       gameMasterId: newUser._id,
       users: [{ user: newUser._id, status: false, name: newUser.name }],
-      usersStatus: {
-        [newUser._id]: false
-      },
       start: '',
       goal: '',
       timeLimit: 300
