@@ -47,6 +47,11 @@ app.get("/GamePlay", (req, res) => {
     path.join(__dirname, "public", "./pages/GamePlay/GamePlay.html")
   );
 });
+app.get("/EndingRoom", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "./pages/EndingRoom/EndingRoom.html")
+  );
+});
 
 const PORT = 3221;
 app.listen(PORT, "0.0.0.0", () => {

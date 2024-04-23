@@ -1,5 +1,48 @@
 import { BACKEND_URL } from "./config.js";
 
+export async function nextPage(userId, nextPage, roomId) {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    "userId": userId,
+    "nextPage": nextPage,
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch(`${BACKEND_URL}/game/rooms/${roomId}/nextPage`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+}
+
+export async function gameEnd(roomId) {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    "roomId": roomId,
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch(`${BACKEND_URL}/game/rooms/${roomId}/timeLimitExceed`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+}
+
 export async function startGame(roomId) {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

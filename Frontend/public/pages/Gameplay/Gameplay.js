@@ -1,6 +1,9 @@
+import { gameEnd, nextPage } from "../../api.js";
 import wtf from "https://cdn.skypack.dev/wtf_wikipedia";
 
+let userId = localStorage.getItem("userId");
 let linksClickedCount = 0;
+const roomId = localStorage.getItem("roomId");
 
 window.addEventListener("keydown", function (event) {
   // Check if Ctrl (or Cmd for Mac) + F is pressed
@@ -58,6 +61,7 @@ const loadArticle = async (article) => {
           loadArticle(link);
           updateCurrentArticle(link);
           updateLinksClicked();
+          nextPage(userId, link, roomId);
         }
       });
       content.appendChild(pElement);
@@ -74,7 +78,7 @@ function startTimer(duration) {
   timer = duration;
   intervalId = setInterval(() => {
     timer--;
-
+    localStorage.setItem("timer", timer);
     // Convert remaining time to minutes and seconds
     const minutes = Math.floor(timer / 60);
     const seconds = timer % 60;
@@ -87,6 +91,8 @@ function startTimer(duration) {
 
     if (timer <= 0) {
       clearInterval(intervalId); // Stop the timer
+      gameEnd(roomId);
+      window.location.href = "/EndingRoom";
     }
   }, 1000); // Update every 1 second
 }
@@ -113,10 +119,21 @@ function updateLinksClicked(increment = 1) {
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
-  // Example usage:
-  loadArticle("Glastonbury");
-  startTimer(1200); // Start a timer for 5 minutes (300 seconds)
-  updateGoalArticle("Emerald");
-  updateCurrentArticle("Glastonbury");
+  // Example usage:]
+  const timer = localStorage.getItem("timer");
+  let timeLimit;
+  if (timer) {
+    timeLimit = timer;
+  } else {
+    timeLimit = localStorage.getItem("timeLimit") - 0;
+  }
+
+  const goal = localStorage.getItem("goal");
+  const start = localStorage.getItem("start");
+
+  loadArticle(goal === "" ? "Glastonbury" : goal);
+  startTimer(timeLimit); // Start a timer for 5 minutes (300 seconds)
+  updateGoalArticle(start === "" ? "Emerald" : start);
+  updateCurrentArticle(goal === "" ? "Glastonbury" : goal);
   updateLinksClicked(linksClickedCount); // Set the "Links clicked" count to 5
 });
