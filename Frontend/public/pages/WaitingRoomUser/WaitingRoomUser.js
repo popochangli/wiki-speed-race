@@ -17,6 +17,12 @@ const loadMember = async () => {
   const data = await getRoom(roomId);
 
   if (data) {
+    if (!data.waitingStatus) {
+      window.localStorage.setItem("goal", data.goal);
+      window.localStorage.setItem("start", data.start);
+      window.localStorage.setItem("timeLimit", data.timeLimit);
+      window.location.href = "/GamePlay";
+    }
     data.users.forEach((element) => {
       if (element.user === data.gameMasterId) {
         memberList.innerHTML = `<div class="self-center text-sm font-bold text-zinc-700">

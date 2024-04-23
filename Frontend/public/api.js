@@ -15,7 +15,7 @@ export async function startGame(roomId) {
     redirect: "follow",
   };
 
-  fetch(`${BACKEND_URL}/game/rooms/${roomId}/setStart`, requestOptions)
+  fetch(`${BACKEND_URL}/game/rooms/${roomId}/startGame`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
