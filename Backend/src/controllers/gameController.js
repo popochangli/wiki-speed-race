@@ -204,19 +204,17 @@ export const nextPage = async (req, res) => {
   }
   try {
       const currentRoom = await Room.findOne({ roomId : roomId });
-      const checkUser = await User.findOne({ _id : userId });
+      const checkUser = await User.findOneAndUpdate(
+          {_id : userId},
+          { $push : { totalArticle : newPage}},
+          { new : true}
+      );
       if (!currentRoom) {
         return res.status(401).json({ message : "Room doesn't exist!"});
       }
       if (!checkUser) {
         return res.status(401).json({ message : "User doesn't exist!"});
       }
-      
-      const currentUser = await User.findOneAndUpdate(
-        {_id : userId},
-        { $push : { totalArticle : newPage}},
-        { new : true}
-      );
       
     let room = await Room.findOne({ roomId: roomId });
 
