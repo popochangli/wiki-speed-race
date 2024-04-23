@@ -18,7 +18,8 @@ const roomSchema = new mongoose.Schema({
     required: true
   },
   gameMasterId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     require: false
   },
   users: [{
