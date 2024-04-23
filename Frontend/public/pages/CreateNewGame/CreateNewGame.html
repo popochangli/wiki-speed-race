@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wiki Speed Race</title>
+    <link
+      rel="icon"
+      href="images/wiklipedia_speed_race.png"
+      type="image/x-icon"
+    />
+    <link href="./pages/style.css" rel="stylesheet" />
+  </head>
+  <body
+    class="bg-sky-200 h-screen flex flex-col items-center justify-center p-4"
+  >
+    <div class="bg-white rounded-lg shadow-lg p-8 m-4 max-w-sm w-full">
+      <h1 class="text-4xl text-sky-600 font-bold mb-8">Wiki Speed Race!</h1>
+      <form class="mb-4" id="nameForm">
+        <label for="game-pin" class="block text-zinc-700 text-sm font-bold mb-2"
+          >Your Name</label
+        >
+        <input
+          type="text"
+          id="game-pin"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight"
+          placeholder="Enter Your Name"
+        />
+      </form>
+      <button
+        id="nextBtn"
+        class="w-full bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+        type="button"
+      >
+        Next
+      </button>
+    </div>
+    <footer class="text-sky-500 text-sm text-center mt-4">
+      <p>
+        &copy; 2024 Chulalongkorn Student. All rights reserved.
+        <br />Designed by Final Project Group 21.
+      </p>
+    </footer>
+    <script type="module" src="./pages/CreateNewGame/CreateNewGame.js"></script>
+  </body>
+</html>
