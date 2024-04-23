@@ -170,11 +170,11 @@ export const setTimeLimit = async (req, res) => {
 export const kickUser = async (req, res) => {
   const { roomId } = req.params; 
   const { userId } = req.body;
-
+  console.log(userId)
   try {
       const room = await Room.findOneAndUpdate(
           { roomId: roomId },
-          { $pull: { users: { user: _id } } },
+          { $pull: { users: { user: userId } } },
           { new: true }
       );
 
