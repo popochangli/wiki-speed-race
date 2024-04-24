@@ -1,9 +1,11 @@
 import { createRoom } from "../../api.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = document.getElementById("nextBtn");
   const nameInput = document.getElementById("game-pin");
 
-  nextBtn.addEventListener("click", async () => {
+  nextBtn.addEventListener("click", async (event) => {
+    event.preventDefault();
     const name = nameInput.value;
     //Check if name is not empty
     if (name.trim() !== "") {

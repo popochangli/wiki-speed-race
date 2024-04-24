@@ -88,6 +88,8 @@ const loadMember = async () => {
       window.localStorage.setItem("goal", data.goal);
       window.localStorage.setItem("start", data.start);
       window.localStorage.setItem("timeLimit", data.timeLimit);
+      window.localStorage.removeItem("current");
+      window.localStorage.removeItem("timer");
       window.location.href = "/GamePlay";
     }
     data.users.forEach((element) => {

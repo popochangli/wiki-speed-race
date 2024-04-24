@@ -1,9 +1,19 @@
-import { gameEnd, nextPage } from "../../api.js";
+import { gameEnd, nextPage, getRoom } from "../../api.js";
 import wtf from "https://cdn.skypack.dev/wtf_wikipedia";
 
 let userId = localStorage.getItem("userId");
 let linksClickedCount = 0;
 const roomId = localStorage.getItem("roomId");
+
+setInterval(async () => {
+  const data = await getRoom(roomId);
+  if (
+    data.gameEndStatus ||
+    data.users.filter((item) => item.user === userId)[0].status
+  ) {
+    window.location.href = "/EndingRoom";
+  }
+}, 3000);
 
 window.addEventListener("keydown", function (event) {
   // Check if Ctrl (or Cmd for Mac) + F is pressed
@@ -60,8 +70,10 @@ const loadArticle = async (article) => {
           const link = event.target.value;
           loadArticle(link);
           updateCurrentArticle(link);
+          localStorage.setItem("current", link);
           updateLinksClicked();
           nextPage(userId, link, roomId);
+          window.scrollTo(0, 0);
         }
       });
       content.appendChild(pElement);
@@ -121,19 +133,25 @@ function updateLinksClicked(increment = 1) {
 document.addEventListener("DOMContentLoaded", () => {
   // Example usage:]
   const timer = localStorage.getItem("timer");
+  const current = localStorage.getItem("current");
   let timeLimit;
   if (timer) {
     timeLimit = timer;
   } else {
     timeLimit = localStorage.getItem("timeLimit") - 0;
   }
+  let article;
+  if (current) {
+    article = current;
+  } else {
+    article = localStorage.getItem("start");
+  }
 
   const goal = localStorage.getItem("goal");
-  const start = localStorage.getItem("start");
 
-  loadArticle(goal === "" ? "Glastonbury" : goal);
+  loadArticle(article === "" ? "Glastonbury" : article);
   startTimer(timeLimit); // Start a timer for 5 minutes (300 seconds)
-  updateGoalArticle(start === "" ? "Emerald" : start);
-  updateCurrentArticle(goal === "" ? "Glastonbury" : goal);
+  updateCurrentArticle(article === "" ? "Emerald" : article);
+  updateGoalArticle(goal === "" ? "Glastonbury" : goal);
   updateLinksClicked(linksClickedCount); // Set the "Links clicked" count to 5
 });

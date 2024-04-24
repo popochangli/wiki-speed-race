@@ -6,7 +6,7 @@ export async function nextPage(userId, nextPage, roomId) {
 
   const raw = JSON.stringify({
     "userId": userId,
-    "nextPage": nextPage,
+    "newPage": nextPage,
   });
 
   const requestOptions = {

@@ -36,14 +36,38 @@ export const createRoom = async (req, res) => {
   }
   try {
     const newUser = await createUser(req, res);
+    const start = [
+      "Bed",
+      "Earth",
+      "Gold",
+      "Emerald",
+      "Diamond",
+      "Arsenal",
+      "Binary tree",
+      "Apple",
+      "Intel",
+      "Bidet",
+    ];
+    const goal = [
+      "Oxygen",
+      "Minecraft",
+      "One piece",
+      "Thailand",
+      "Bangkok",
+      "Chelsea",
+      "Dragonball",
+      "Github",
+      "Male",
+      "Lionel Messi",
+    ];
     const newRoom = new Room({
       roomId: roomId,
       gameEndStatus: false,
       waitingStatus: true,
       gameMasterId: newUser._id,
       users: [{ user: newUser._id, status: false, name: newUser.name }],
-      start: "",
-      goal: "",
+      start: start[Math.floor(Math.random() * start.length)],
+      goal: goal[Math.floor(Math.random() * goal.length)],
       timeLimit: 300,
     });
     await newRoom.save();
@@ -152,11 +176,9 @@ export const setTimeLimit = async (req, res) => {
   const { timeLimit } = req.body;
 
   if (!timeLimit || typeof timeLimit !== "number") {
-    return res
-      .status(400)
-      .json({
-        message: "Invalid timeLimit provided. Please provide a valid number.",
-      });
+    return res.status(400).json({
+      message: "Invalid timeLimit provided. Please provide a valid number.",
+    });
   }
 
   try {
