@@ -1,0 +1,21 @@
+@startuml mongoose_model_room
+Object Room {
+    - roomId: String
+    - gameEndStatus: Boolean
+    - waitingStatus: Boolean
+    - gameMasterId: ObjectId
+    - users: ArrayObject
+    - start: String
+    - goal: String
+    - timeLimit: Number
+}
+
+Object User {
+    - name: String
+    - userId: String
+    - totalArticle: ArrayObject
+    - start: String
+    - goal: String
+    - finishTime: Number
+}
+@enduml
